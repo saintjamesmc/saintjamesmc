@@ -83,11 +83,6 @@
             .content {
                 color: #1a1a1a;
             }
-
-            .server-info {
-                background: rgba(255, 255, 255, 0.95);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            }
         }
 
         /* Dark mode */
@@ -98,11 +93,6 @@
             
             .content {
                 color: #f0f0f0;
-            }
-
-            .server-info {
-                background: rgba(30, 30, 30, 0.95);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -119,11 +109,8 @@
         }
 
         .server-info {
-            border-radius: 16px;
-            padding: 3rem;
             max-width: 600px;
             text-align: center;
-            backdrop-filter: blur(10px);
         }
 
         h1 {
@@ -265,41 +252,119 @@
         .map-link:hover {
             transform: translateY(-2px);
         }
+
+        /* Lesson Page Overlay */
+        #lessonPage {
+            position: fixed;
+            top: 100vh;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1000;
+            transition: top 0.5s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #lessonPage.active {
+            top: 0;
+        }
+
+        #main-container {
+            transition: transform 0.5s ease;
+        }
+
+        #main-container.slide-down {
+            transform: translateY(-100vh);
+        }
+
+        .lesson-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid;
+        }
+
+        @media (prefers-color-scheme: light) {
+            #lessonPage {
+                background: white;
+            }
+            .lesson-header {
+                background: rgba(255, 255, 255, 0.98);
+                border-bottom-color: rgba(0, 0, 0, 0.1);
+            }
+            .close-btn {
+                background: #f44336;
+                color: white;
+            }
+            .close-btn:hover {
+                background: #d32f2f;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            #lessonPage {
+                background: #1a1a1a;
+            }
+            .lesson-header {
+                background: rgba(30, 30, 30, 0.98);
+                border-bottom-color: rgba(255, 255, 255, 0.1);
+            }
+            .close-btn {
+                background: #f44336;
+                color: white;
+            }
+            .close-btn:hover {
+                background: #ff5252;
+            }
+        }
+
+        #lessonTitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        #lessonFrame {
+            flex: 1;
+            border: none;
+            width: 100%;
+        }
+
+        .lesson-frame {
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <div class="background" id="background"></div>
-    <div class="overlay"></div>
-    
-    <div class="content">
-        <div class="server-info">
-            <h1> SJA <span class="scramble"></span> Server</h1>
-            <p class="subtitle">Join the Server</p>
-            
-            <div class="server-address" onclick="copyToClipboard('java.sja-mc.cfd')" title="Click to copy">
-                <strong>IP:</strong> java.sja-mc.cfd <strong>Version:</strong> 1.21.5+
-            </div>
-            
-            <div class="bedrock-section">
-                <p class="bedrock-title">🎮 Console/Bedrock Players</p>
-                <div class="bedrock-info" onclick="copyToClipboard('SaintJamesMC')" title="Click to copy">
-                    Add <strong>SaintJamesMC</strong> on <span class="scramble"></span>
-                </div>
-            </div>
-            
-            <div class="info-text">
-                <p>Welcome to the SJA <span class="scramble"></span> Server!</p>
-            </div>
-            
-            <a href="https://map.sja-mc.cfd/" class="map-link" target="_blank">
-                View Live Map
-            </a>
-            
-            <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">
-                <a href="terms.html" style="text-decoration: none; color: inherit; opacity: 0.8;">Terms of Service</a> • 
-                <a href="privacy.html" style="text-decoration: none; color: inherit; opacity: 0.8;">Privacy Policy</a>
-            </p>
+    <div id="main-container">
+        <div class="background" id="background"></div>
+        <div class="overlay"></div>
+        
+        <div class="content">
+        <div class="server-info" id="server-info-container">
+            <p style="opacity: 0.7;">Loading server information...</p>
         </div>
+    </div>
+    </div>
+
+    <div id="lessonPage">
+        <div class="lesson-header">
+            <h2 id="lessonTitle">Loading...</h2>
+            <button class="close-btn" onclick="closeLessonPage()">Close</button>
+        </div>
+        <iframe id="lessonFrame" class="lesson-frame" frameborder="0" src=""
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"></iframe>
     </div>
 
     <script>
@@ -376,15 +441,27 @@
 
         // Wait for page to fully load
         window.addEventListener('load', () => {
-            const scrambleElements = document.querySelectorAll('.scramble');
-            scrambleElements.forEach(el => scrambleText(el, secretWord));
+            // Load server info from CDN
+            fetch('https://cdn.jsdelivr.net/gh/saintjamesmc/saintjamesmc@master/overlay/index.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('server-info-container').innerHTML = html;
+                    
+                    // Initialize scramble effect after content is loaded
+                    const scrambleElements = document.querySelectorAll('.scramble');
+                    scrambleElements.forEach(el => scrambleText(el, secretWord));
 
-            // Reveal text 0.25 seconds after page fully loads
-            setTimeout(() => {
-                scrambleElements.forEach(el => {
-                    el.textContent = el.dataset.original;
+                    // Reveal text 0.25 seconds after content loads
+                    setTimeout(() => {
+                        scrambleElements.forEach(el => {
+                            el.textContent = el.dataset.original;
+                        });
+                    }, 250);
+                })
+                .catch(error => {
+                    console.error('Error loading server info:', error);
+                    document.getElementById('server-info-container').innerHTML = '<p style="opacity: 0.7;">Failed to load server information. Please refresh the page.</p>';
                 });
-            }, 250);
         });
 
         // Copy to clipboard function
@@ -397,6 +474,28 @@
                     addressDiv.innerHTML = originalText;
                 }, 2000);
             });
+        }
+
+        // Lesson page functions
+        function openLessonFromCDN(title, url) {
+            document.getElementById('lessonTitle').textContent = title;
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    const iframe = document.getElementById('lessonFrame');
+                    iframe.srcdoc = html;
+                })
+                .catch(error => console.error('Error loading content:', error));
+            document.getElementById('lessonPage').classList.add('active');
+            document.getElementById('main-container').classList.add('slide-down');
+        }
+
+
+        // Load content from GitHub CDN
+        // Example: openLessonFromCDN('Server Info', 'https://cdn.jsdelivr.net/gh/saintjamesmc/saintjamesmc@master/index.html');
+        function closeLessonPage() {
+            document.getElementById('lessonPage').classList.remove('active');
+            document.getElementById('main-container').classList.remove('slide-down');
         }
     </script>
 </body>
