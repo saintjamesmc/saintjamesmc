@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - SJA Minecraft Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background container */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 110%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            animation: slowPan 30s ease-in-out infinite alternate;
+        }
+
+        .background-image.active {
+            opacity: 1;
+        }
+
+        @keyframes slowPan {
+            0% {
+                transform: translate(0, 0) scale(1.1);
+            }
+            25% {
+                transform: translate(-5%, -5%) scale(1.15);
+            }
+            50% {
+                transform: translate(-5%, 5%) scale(1.1);
+            }
+            75% {
+                transform: translate(5%, -5%) scale(1.12);
+            }
+            100% {
+                transform: translate(0, 0) scale(1.1);
+            }
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Light mode (default) */
+        @media (prefers-color-scheme: light) {
+            .overlay {
+                background: rgba(255, 255, 255, 0.85);
+            }
+            
+            .content {
+                color: #1a1a1a;
+            }
+
+            .policy-container {
+                background: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+            .back-link {
+                color: #2196F3;
+            }
+
+            .back-link:hover {
+                color: #1976D2;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .overlay {
+                background: rgba(0, 0, 0, 0.75);
+            }
+            
+            .content {
+                color: #f0f0f0;
+            }
+
+            .policy-container {
+                background: rgba(30, 30, 30, 0.95);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            }
+
+            .back-link {
+                color: #42A5F5;
+            }
+
+            .back-link:hover {
+                color: #64B5F6;
+            }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .policy-container {
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 800px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h2:first-of-type {
+            margin-top: 1rem;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .policy-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="overlay"></div>
+    
+    <div class="content">
+        <div class="policy-container">
+            <a href="index.html" class="back-link">← Back to Server Info</a>
+            
+            <h1>Terms of Service</h1>
+            <p class="subtitle">Effective Date: January 7, 2026</p>
+            <p class="subtitle">These Terms of Service ("Terms") govern use of the Minecraft Whitelist and Discord Integration Service (the "Service").</p>
+
+            <div class="section">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using the Service, users acknowledge that they have read, understood, and agree to be bound by these Terms.</p>
+            </div>
+
+            <div class="section">
+                <h2>2. Eligibility and Accuracy</h2>
+                <p>Users must provide accurate and truthful information for verification. Providing false or misleading information may result in denial or revocation of access.</p>
+            </div>
+
+            <div class="section">
+                <h2>3. Account Linking and Access</h2>
+                <ul>
+                    <li>Each verified email may be associated with a single Minecraft account</li>
+                    <li>Account replacements require explicit confirmation</li>
+                    <li>Access may be revoked at any time at the discretion of administrators</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>4. Discord Integration</h2>
+                <ul>
+                    <li>Discord account linking is facilitated through DiscordSRV</li>
+                    <li>Discord roles may be assigned or removed automatically</li>
+                    <li>Interference with linking mechanisms may result in loss of access</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>5. Prohibited Conduct</h2>
+                <p>Users agree not to:</p>
+                <ul>
+                    <li>Circumvent verification systems</li>
+                    <li>Impersonate another individual</li>
+                    <li>Attempt unauthorized access to systems or data</li>
+                    <li>Disrupt or abuse the Service</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>6. Service Availability</h2>
+                <p>The Service is provided on an "as is" and "as available" basis. No warranties are made regarding uptime, reliability, or availability.</p>
+            </div>
+
+            <div class="section">
+                <h2>7. Administrative Authority</h2>
+                <p>Administrators reserve the right to:</p>
+                <ul>
+                    <li>Modify or terminate access at any time</li>
+                    <li>Update verification requirements</li>
+                    <li>Enforce community rules and policies</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>8. Limitation of Liability</h2>
+                <p>To the fullest extent permitted by law, the Service and its administrators shall not be liable for any direct or indirect damages arising from use or inability to use the Service.</p>
+            </div>
+
+            <div class="section">
+                <h2>9. Modifications to Terms</h2>
+                <p>These Terms may be amended at any time. Continued use of the Service constitutes acceptance of updated Terms.</p>
+            </div>
+
+            <div class="section">
+                <h2>10. Governing Rules</h2>
+                <p>Use of the Service is also subject to:</p>
+                <ul>
+                    <li>Minecraft server rules</li>
+                    <li>Discord server rules</li>
+                    <li>Applicable institutional or community policies</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background images
+        const images = [
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-8_-19.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-8_-20.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-9_-19.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-7_-19.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-8_-18.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-9_-20.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-7_-20.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-9_-18.png',
+            'https://map.sja-mc.cfd/tiles/minecraft_overworld/3/-7_-18.png'
+        ];
+
+        let currentIndex = 0;
+        const background = document.getElementById('background');
+
+        // Create background image elements
+        images.forEach((img, index) => {
+            const div = document.createElement('div');
+            div.className = 'background-image';
+            div.style.backgroundImage = `url('${img}')`;
+            if (index === 0) {
+                div.classList.add('active');
+            }
+            background.appendChild(div);
+        });
+
+        // Rotate backgrounds
+        function rotateBackground() {
+            const elements = document.querySelectorAll('.background-image');
+            elements[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            elements[currentIndex].classList.add('active');
+        }
+
+        // Change background every 5 seconds
+        setInterval(rotateBackground, 5000);
+    </script>
+</body>
+</html>
