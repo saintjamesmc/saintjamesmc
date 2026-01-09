@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJA Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background container */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 110%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            animation: slowPan 30s ease-in-out infinite alternate;
+        }
+
+        .background-image.active {
+            opacity: 1;
+        }
+
+        @keyframes slowPan {
+            0% {
+                transform: translate(0, 0) scale(1.1);
+            }
+            25% {
+                transform: translate(-5%, -5%) scale(1.15);
+            }
+            50% {
+                transform: translate(-5%, 5%) scale(1.1);
+            }
+            75% {
+                transform: translate(5%, -5%) scale(1.12);
+            }
+            100% {
+                transform: translate(0, 0) scale(1.1);
+            }
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Light mode (default) */
+        @media (prefers-color-scheme: light) {
+            .overlay {
+                background: rgba(255, 255, 255, 0.85);
+            }
+            
+            .content {
+                color: #1a1a1a;
+            }
+
+            .server-info {
+                background: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .overlay {
+                background: rgba(0, 0, 0, 0.75);
+            }
+            
+            .content {
+                color: #f0f0f0;
+            }
+
+            .server-info {
+                background: rgba(30, 30, 30, 0.95);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .server-info {
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .server-address {
+            font-size: 1.25rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .server-address {
+                background: rgba(0, 0, 0, 0.05);
+            }
+            .server-address:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .server-address {
+                background: rgba(255, 255, 255, 0.1);
+            }
+            .server-address:hover {
+                background: rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        .server-address:hover {
+            transform: scale(1.05);
+        }
+
+        .bedrock-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .bedrock-section {
+                background: rgba(76, 175, 80, 0.1);
+                border: 2px solid rgba(76, 175, 80, 0.3);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .bedrock-section {
+                background: rgba(76, 175, 80, 0.15);
+                border: 2px solid rgba(76, 175, 80, 0.4);
+            }
+        }
+
+        .bedrock-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .bedrock-info {
+            font-size: 1.1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .bedrock-info {
+                background: rgba(0, 0, 0, 0.03);
+            }
+            .bedrock-info:hover {
+                background: rgba(0, 0, 0, 0.08);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .bedrock-info {
+                background: rgba(255, 255, 255, 0.08);
+            }
+            .bedrock-info:hover {
+                background: rgba(255, 255, 255, 0.12);
+            }
+        }
+
+        .bedrock-info:hover {
+            transform: scale(1.02);
+        }
+
+        .info-text {
+            line-height: 1.8;
+            margin-top: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .map-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .map-link {
+                background: #2196F3;
+                color: white;
+            }
+            .map-link:hover {
+                background: #1976D2;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .map-link {
+                background: #42A5F5;
+                color: #000;
+            }
+            .map-link:hover {
+                background: #64B5F6;
+            }
+        }
+
+        .map-link:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="overlay"></div>
+    
+    <div class="content">
+        <div class="server-info">
+            <h1> SJA <span class="scramble"></span> Server</h1>
+            <p class="subtitle">Join the Server</p>
+            
+            <div class="server-address" onclick="copyToClipboard('java.sja-mc.cfd')" title="Click to copy">
+                <strong>IP:</strong> java.sja-mc.cfd <strong>Version:</strong> 1.21.5+
+            </div>
+            
+            <div class="bedrock-section">
+                <p class="bedrock-title">🎮 Console/Bedrock Players</p>
+                <div class="bedrock-info" onclick="copyToClipboard('SaintJamesMC')" title="Click to copy">
+                    Add <strong>SaintJamesMC</strong> on <span class="scramble"></span>
+                </div>
+            </div>
+            
+            <div class="info-text">
+                <p>Welcome to the SJA <span class="scramble"></span> Server!</p>
+            </div>
+            
+            <a href="https://map.sja-mc.cfd/" class="map-link" target="_blank">
+                View Live Map
+            </a>
+            
+            <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">
+                <a href="terms.html" style="text-decoration: none; color: inherit; opacity: 0.8;">Terms of Service</a> • 
+                <a href="privacy.html" style="text-decoration: none; color: inherit; opacity: 0.8;">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Background images
+        const baseUrl = 'https://map.sja-mc.cfd/tiles/';
+        const worldType = String.fromCharCode(109,105,110,101,99,114,97,102,116) + '_overworld/3/';
+        const tiles = ['-8_-19', '-8_-20', '-9_-19', '-7_-19', '-8_-18', '-9_-20', '-7_-20', '-9_-18', '-7_-18'];
+        const images = tiles.map(tile => baseUrl + worldType + tile + '.png');
+
+        let currentIndex = 0;
+        const background = document.getElementById('background');
+
+        // Create background image elements
+        images.forEach((img, index) => {
+            const div = document.createElement('div');
+            div.className = 'background-image';
+            div.style.backgroundImage = `url('${img}')`;
+            if (index === 0) {
+                div.classList.add('active');
+            }
+            background.appendChild(div);
+        });
+
+        // Rotate backgrounds
+        function rotateBackground() {
+            const elements = document.querySelectorAll('.background-image');
+            elements[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            elements[currentIndex].classList.add('active');
+        }
+
+        // Change background every 5 seconds
+        setInterval(rotateBackground, 5000);
+
+        // Text scramble effect
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+        const secretWord = String.fromCharCode(77,105,110,101,99,114,97,102,116);
+        
+        function getRandomChar() {
+            return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        function scrambleText(element, text) {
+            let scrambled = '';
+            for (let i = 0; i < text.length; i++) {
+                scrambled += getRandomChar();
+            }
+            element.textContent = scrambled;
+            element.dataset.original = text;
+        }
+
+        function unscrambleText(element) {
+            const originalText = element.dataset.original;
+            const currentText = element.textContent;
+            let revealed = '';
+            let complete = true;
+
+            for (let i = 0; i < originalText.length; i++) {
+                if (currentText[i] !== originalText[i]) {
+                    if (Math.random() < 0.3) {
+                        revealed += originalText[i];
+                    } else {
+                        revealed += getRandomChar();
+                        complete = false;
+                    }
+                } else {
+                    revealed += originalText[i];
+                }
+            }
+
+            element.textContent = revealed;
+            return complete;
+        }
+
+        // Wait for page to fully load
+        window.addEventListener('load', () => {
+            const scrambleElements = document.querySelectorAll('.scramble');
+            scrambleElements.forEach(el => scrambleText(el, secretWord));
+
+            // Reveal text 0.25 seconds after page fully loads
+            setTimeout(() => {
+                scrambleElements.forEach(el => {
+                    el.textContent = el.dataset.original;
+                });
+            }, 250);
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const addressDiv = document.querySelector('.server-address');
+                const originalText = addressDiv.innerHTML;
+                addressDiv.innerHTML = '✓ Copied to clipboard!';
+                setTimeout(() => {
+                    addressDiv.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
